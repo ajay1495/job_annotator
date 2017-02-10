@@ -11,21 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170204004604) do
+ActiveRecord::Schema.define(version: 20170210212142) do
 
   create_table "annotations", force: :cascade do |t|
     t.integer  "job_id"
-    t.integer  "min_tenure"
+    t.integer  "user_id"
+    t.integer  "min_tenure",      default: 0
     t.integer  "max_tenure",      default: 216
-    t.string   "skills"
-    t.string   "optional_skills"
-    t.string   "education_level"
-    t.string   "degree_major"
-    t.string   "work_area"
-    t.string   "work_type"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
-    t.string   "user",            default: "sovereign"
+    t.string   "skills",          default: ""
+    t.string   "optional_skills", default: ""
+    t.string   "education_level", default: ""
+    t.string   "degree_major",    default: ""
+    t.string   "work_area",       default: ""
+    t.string   "work_type",       default: ""
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "personality"
+    t.boolean  "valid_posting",   default: true
   end
 
   create_table "jobs", force: :cascade do |t|
@@ -35,6 +37,18 @@ ActiveRecord::Schema.define(version: 20170204004604) do
     t.string   "description"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.boolean  "is_initialized"
+    t.string   "digest"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "progress",       default: 1
+    t.integer  "timetaken"
+    t.string   "othernotes"
   end
 
 end

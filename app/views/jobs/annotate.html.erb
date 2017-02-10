@@ -3,6 +3,7 @@
 
 <div class="container-fluid" id="myContainer">
     <div class="row">
+        <%= form_tag("/jobs/post_annotate", :class=>"form-signin", :id=>"annotationForm", :method=>"POST") do %>      
         <div class="col-sm-4 col-md-4 col-md-offset-1">        	
     		<h3><%= @job_to_annotate.title%> @ <%= @job_to_annotate.company_name%></h3>
     		<div id="jobDescription">
@@ -11,37 +12,39 @@
 	    		</p>
     		</div>
     		<br/>
-    		<a href="/jobs/annotate/<%= @nextJobId %>" class="btn btn-primary">Next</a>
+        <%= submit_tag "Next!", id: "nextButton", class: "btn btn-primary" %>
     		&nbsp;
-    		<a href="/jobs/annotate/<%= @nextJobId-2 %>" class="btn btn-default">Back</a>
         </div>  
-        <div class="col-sm-4 col-md-4 col-md-offset-2">   
-        	<form class="form-signin" id="annotationForm">
-        		<h2 class="form-signin-heading">Directions</h2>
-        		<p>Read the job posting on the right and fill in the following information.<p>
+        <div class="col-sm-4 col-md-4 col-md-offset-2"> 
+ 
+    		<h2 class="form-signin-heading">Directions</h2>
+    		<p>Read the job posting on the right and fill in the following information.<p>
+        <%= check_box_tag 'acceptCheckbox', "1", true %> Posting looks good (readable, in english, a descriptive posting)
 				<p>Required skills:</p>
 				<p>
-					<input id="skillsInput" type="text" value="<%= @sov_annotation.skills %>" placeholder="Absolutely essential skills required" />
+          <%= text_area_tag "skillsInput", @sov_annotation.skills.downcase, placeholder: "Absolutely essential skills required", rows:5, id:"skillsInput" %>
 				</p>				
 				<p>     	
 					Nice to have skills:
 				</p>
 				<p>
-					<input id="niceSkillsInput" type="text" value="<%= @sov_annotation.optional_skills %>" placeholder="Non-essential, but nice skills to have" />
+          <%= text_area_tag "niceSkillsInput", @sov_annotation.optional_skills.downcase, placeholder: "Non-essential, but nice skills to have", rows:4, id:"niceSkillsInput" %>
 				</p>								
 				<p>
 					Minimum tenure (in years):
 				</p>
 				<p>
 					<div class="btn-group" data-toggle="buttons">
-					  <% for ii in 0..9 %>
+					  <% for ii in 0..15 %>
 					  	<% if ii == @sov_annotation.min_tenure %>
 						  <label class="btn btn-primary active">
-						    <input type="radio" name="minTenure" id="<%= ii %>" autocomplete="off" checked><%= ii %>
+                <%= radio_button_tag "minTenure", ii, true, autocomplete:"off" %>
+                <%= ii %>
 						  </label>
 						<% else %>
 						  <label class="btn btn-primary">
-						    <input type="radio" name="minTenure" id="<%= ii %>" autocomplete="off"><%= ii %>
+                <%= radio_button_tag "minTenure", ii, false, autocomplete:"off" %>
+						    <%= ii %>
 						  </label>						 
 						<% end %>
 					  <% end %>
@@ -51,65 +54,55 @@
 					Maximum tenure (in years):
 				</p>
 				<p>
-					<div class="btn-group" data-toggle="buttons">
-					  <% for ii in 0..9 %>
-					  	<% if ii == @sov_annotation.max_tenure %>
-						  <label class="btn btn-primary active">
-						    <input type="radio" name="maxTenure" id="<%= ii %>" autocomplete="off" checked><%= ii %>
-						  </label>
-						<% else %>
-						  <label class="btn btn-primary">
-						    <input type="radio" name="maxTenure" id="<%= ii %>" autocomplete="off"><%= ii %>
-						  </label>						 
-						<% end %>
-					  <% end %>
-					</div>
+          <div class="btn-group" data-toggle="buttons">
+            <% for ii in 0..15 %>
+              <% if ii == @sov_annotation.max_tenure %>
+              <label class="btn btn-primary active">
+                <%= radio_button_tag "maxTenure", ii, true, autocomplete:"off" %>
+                <%= ii %>
+              </label>
+            <% else %>
+              <label class="btn btn-primary">
+                <%= radio_button_tag "maxTenure", ii, false, autocomplete:"off" %>
+                <%= ii %>
+              </label>             
+            <% end %>
+            <% end %>
+          </div>
 				</p>	
 				<p>     	
 					Required degree type(s):
 				</p>
 				<p>
-					<input id="requiredDegreeInput" type="text" value="<%= @sov_annotation.education_level %>" placeholder="" />
+          <%= text_field_tag "requiredDegreeInput", @sov_annotation.education_level, id:"requiredDegreeInput" %>
 				</p>		
 				<p>Required degree major(s):</p>
-				<p><input id="requiredMajorInput" type="text" value="<%= @sov_annotation.degree_major %>" placeholder="" /></p>
+				<p><%= text_field_tag "requiredMajorInput", @sov_annotation.degree_major, id:"requiredMajorInput" %></p>
 				<p>Desired personality attributes</p>
-				<p><input id="requiredPersonalityInput" type="text" value="" placeholder="" /></p>											
+        <p><%= text_field_tag "requiredPersonalityInput", "", id:"requiredPersonalityInput" %></p>
 				<p>Functional area</p>
-				<p><input id="requiredAreaInput" type="text" value="<%= @sov_annotation.work_area %>" placeholder="" /></p>					
-				<p>Full-time or part-time?</p>
-				<p><input id="fulltimePartTime" type="text" value="<%= @sov_annotation.work_type %>" placeholder="" /></p>									
-																						
-			</form>
+        <p><%= text_field_tag "requiredAreaInput", @sov_annotation.work_area, id:"requiredAreaInput" %></p>
+				<p>Commitment Level</p>
+        <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-info">
+          <%= radio_button_tag "fullTime", "full", false, autocomplete:"off" %>
+          Full-time
+        </label>             
+        <label class="btn btn-info">
+          <%= radio_button_tag "partTime", "full", false, autocomplete:"off" %>
+          Part-time
+        </label>   																	
+        </div>					
         </div>
+      <% end %>
+
     </div>
 </div>
-
+<br/>
+<br/>
+<br/>
+<br/>
 <script type="text/javascript">
-    var programmingLanguages = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
     function split( val ) {
       return val.split( /,\s*/ );
     }
@@ -151,12 +144,14 @@
 
     }
 
-    makeAutoComplete("skillsInput", programmingLanguages);
-    makeAutoComplete("niceSkillsInput", programmingLanguages);
-	makeAutoComplete("requiredDegreeInput", programmingLanguages);
-	makeAutoComplete("requiredMajorInput", programmingLanguages);
-	makeAutoComplete("requiredPersonalityInput", programmingLanguages);
-	makeAutoComplete("requiredAreaInput", programmingLanguages);
-	
+  makeAutoComplete("skillsInput", skills);
+  makeAutoComplete("niceSkillsInput", skills);
+
+  degreeTypes = ["Bachelor's", "BA", "BS", "Bachelor of Arts", "Bachelor of Science", "Master's", "MBA", "High School Diploma"]
+
+	makeAutoComplete("requiredDegreeInput", degreeTypes);
+	makeAutoComplete("requiredMajorInput", majors);
+	makeAutoComplete("requiredPersonalityInput", []);
+	makeAutoComplete("requiredAreaInput", []);
 	
 </script>

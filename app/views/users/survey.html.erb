@@ -1,0 +1,27 @@
+<div class="container-fluid" id="myContainer">
+    <div class="row">
+        <div class="col-sm-4 col-md-4 col-md-offset-4">        	
+        	<%= form_for(@curUser, :html=> {:class=>"form-signin", :id=>"annotationForm"}, :url=>"/users/post_survey", :method=>"POST") do |f| %>
+        		<h2 class="form-signin-heading">Quiz Complete!</h2>
+                <p>Your application for this role is complete. If you are a good fit, <b>we will reach out to you</b>. Please answer the following survey questions: </p>
+                <p>About how many minutes did this quiz take you in total?</p>
+                <p>
+                    <%= f.number_field :timetaken, within: 1...200, :placeholder=>"45"  %><br />
+                </p>                                
+                <p>Anything else you'd like to include in your application?</p>
+                <p>
+                    <%= f.text_area :othernotes, :placeholder=>"I believe I am qualified because..."  %><br />
+                </p>
+                <p>Please double check your following information.<p>
+                <p>
+                    <%= f.text_field :name, :placeholder=>"Name" %><br />
+                </p>                
+                <p>
+                    <%= f.text_field :email, :placeholder=>"Email" %><br />
+                </p>        
+
+   		        <%= f.submit "Submit!", class: "btn btn-primary" %>
+			<% end %>        	
+        </div>  
+    </div>
+</div>

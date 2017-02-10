@@ -1,0 +1,17 @@
+<div class="container-fluid" id="myContainer">
+    <div class="row">
+        <div class="col-sm-4 col-md-4 col-md-offset-4">        	
+        	<%= form_for(@curUser, :html=> {:class=>"form-signin", :id=>"annotationForm"}, :url=>"/users/post_update", :method=>"POST") do |f| %>
+        		<h2 class="form-signin-heading">Candidate Information</h2>
+        		<p>Please fill in your name and email address to get started. Please make sure to enter a <b>valid email address</b>.<p>
+				<p>
+					<%= f.text_field :name, :placeholder=>"Name" %><br />
+				</p>				
+				<p>
+					<%= f.text_field :email, :placeholder=>"Email" %><br />
+				</p>				
+   		        <%= f.submit "Begin Quiz!", class: "btn btn-primary" %>
+			<% end %>        	
+        </div>  
+    </div>
+</div>

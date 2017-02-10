@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
+  get 'users/update' => "users/update"
+  post 'users/post_update' => "users/post_update"
+  get 'users/logout' => "users/logout"
+  get 'users/survey' => "users/survey"
+  post 'users/post_survey' => "users/post_survey"
+
+  get 'jobs/annotate' => "jobs#annotate"
   get 'jobs/annotate/:id' => "jobs#annotate"
+  post 'jobs/post_annotate' => "jobs#post_annotate"
+  get 'login' => "users#invite"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -7,6 +7,14 @@
 	overflow: scroll;
 }
 
-#annotationForm input {
+#annotationForm input, textarea {
 	width: 300px;
+}
+
+#annotationForm #nextButton {
+	width: 70px;	
+}
+
+#annotationForm #acceptCheckbox {
+	width: 20px;
 }

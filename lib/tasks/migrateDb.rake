@@ -1,6 +1,12 @@
 task :migrateDb => :environment do
 	puts "Loading jobs dump from local directory..."
 	
+	sovUser = User.new
+	sovUser.name = "Soverign"
+	sovUser.email = "Soverign@Soverign.com"
+	sovUser.is_initialized = true
+	sovUser.digest = ""
+	sovUser.save 
 
 	jobs_dump_filename = Rails.root + "../stella_client_jobs_dump.jobs.json"
 
@@ -25,6 +31,7 @@ task :migrateDb => :environment do
 
 		sov_annotations = Annotation.new 
 		sov_annotations.job = posting
+		sov_annotations.user = sovUser
 
 		# Get soverign predictions for job 
 		if job_info.key?("RequiredSkills")
@@ -89,7 +96,9 @@ task :migrateDb => :environment do
 			sov_annotations.work_area = job_info["category"]
 		end
 
-		sov_annotations.save
+		if !sov_annotations.save
+			print "Something bad happened."
+		end
 	end
 
 	puts "DONE migrating!"
