@@ -9,8 +9,13 @@ task :migrateDb => :environment do
 	sovUser.save 
 
 	jobs_dump_filename = Rails.root + "../stella_client_jobs_dump.jobs.json"
-
+        count = 0
 	File.open(jobs_dump_filename).readlines.each do |line|
+		count += 1
+		if count % 100 ==0 
+			puts "Processing line"
+			puts count
+		end
    		job_info = JSON.parse(line)
 
    		# Housekeeping 
