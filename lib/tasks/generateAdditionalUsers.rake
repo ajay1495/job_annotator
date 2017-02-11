@@ -7,7 +7,7 @@ task :generateAdditionalUsers => :environment do
 		newUser.is_initialized = false
 		newUser.digest = User.digest("#{ii+User.all.length}")
 		if newUser.save 
-			puts "/login?&v=" + newUser.digest
+			puts "http://j13.stella.ai:8080/login?&v=" + newUser.digest
 		else
 			puts "Something went wrong"
 			return

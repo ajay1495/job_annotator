@@ -18,17 +18,17 @@
         <div class="col-sm-4 col-md-4 col-md-offset-2"> 
  
     		<h2 class="form-signin-heading">Directions</h2>
-    		<p>Read the job posting on the right and fill in the following information.<p>
+    		<p>Read the job posting on the right and fill in the following information. The form has been "prefilled", but you must double check all values as they are not fully correct.<p>
         <%= check_box_tag 'acceptCheckbox', "1", true %> Posting looks good (readable, in english, a descriptive posting)
 				<p>Required skills:</p>
 				<p>
-          <%= text_area_tag "skillsInput", @sov_annotation.skills.downcase, placeholder: "Absolutely essential skills required", rows:5, id:"skillsInput" %>
+          <%= text_area_tag "skillsInput", @sov_annotation.skills.downcase, placeholder: "Absolutely essential skills required", rows:7, id:"skillsInput" %>
 				</p>				
 				<p>     	
 					Nice to have skills:
 				</p>
 				<p>
-          <%= text_area_tag "niceSkillsInput", @sov_annotation.optional_skills.downcase, placeholder: "Non-essential, but nice skills to have", rows:4, id:"niceSkillsInput" %>
+          <%= text_area_tag "niceSkillsInput", @sov_annotation.optional_skills.downcase, placeholder: "Non-essential, but nice skills to have", rows:5, id:"niceSkillsInput" %>
 				</p>								
 				<p>
 					Minimum tenure (in years):
