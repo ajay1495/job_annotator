@@ -14,7 +14,7 @@ class JobsController < ApplicationController
 
 		@LIMIT = 20
 
-		if currentUser.progress == @LIMIT
+		if currentUser.progress >= @LIMIT
 			redirect_to("/users/survey")
 		end
 
