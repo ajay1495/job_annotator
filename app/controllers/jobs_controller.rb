@@ -12,7 +12,7 @@ class JobsController < ApplicationController
 			return
 		end
 
-		@LIMIT = 30
+		@LIMIT = 20
 
 		if currentUser.progress == @LIMIT
 			redirect_to("/users/survey")
