@@ -16,6 +16,7 @@ class JobsController < ApplicationController
 
 		if currentUser.progress >= @LIMIT
 			redirect_to("/users/survey")
+			return 
 		end
 
 		if !params[:id] or params[:id].to_i != currentUser.progress
