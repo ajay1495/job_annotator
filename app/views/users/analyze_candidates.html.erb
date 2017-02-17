@@ -5,6 +5,7 @@
     <div class="row">
         <div class="col-sm-8 col-md-8 col-md-offset-2">        	
             <h3>Candidate Analysis</h3>
+            <p>Here are all the candidates that completed at least <%= @LIMIT%> annotations, scored against my annotations.</p>
 
             <table id="viewAllTable" class="display table table-striped table-hover" data-toggle="popover" data-placement="top" data-trigger="manual" data-content="Your created maps will automatically be displayed here.">
               <thead>
@@ -20,7 +21,7 @@
                 <% @candidatesAnalysis.each do |candidate, candidateScore, timetaken, progress, othernotes| %>
                     <tr>
                         <td><%= candidate.name %></td>
-                        <td><%= candidateScore %></td>
+                        <td><%= "#{candidateScore.round(4)}" %></td>
                         <td><%= timetaken %></td>
                         <td><%= progress %></td>
                         <td><%= othernotes %></td>
@@ -28,10 +29,6 @@
                 <% end %>                
               </tbody>
             </table>
-
-
-
-
         </div>  
     </div>
 </div>
