@@ -6,9 +6,13 @@ Rails.application.routes.draw do
   post 'users/post_survey' => "users/post_survey"
 
   get 'jobs/annotate' => "jobs#annotate"
+  get 'jobs/view_annotation/:id' => "jobs#view_annotation"
   get 'jobs/annotate/:id' => "jobs#annotate"
   post 'jobs/post_annotate' => "jobs#post_annotate"
-  get 'login' => "users#invite"
+  get 'login' => "users#login"
+  get 'login_as_best_performing_candidate' => "users#login_as_best_performing_candidate"
+
+  
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

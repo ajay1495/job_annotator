@@ -34,6 +34,19 @@ class JobsController < ApplicationController
 		@nextJobId = params[:id].to_i + 1
 	end
 
+	def view_annotation
+		@job_to_annotate = Job.find_by_id(params[:id])
+		@sov_user = User.find_by_email("soverign@soverign.com")
+
+		@sov_annotation = Annotation.find_by(user: @sov_user, job_id: @job_to_annotate.id)
+		@sov_annotation.skills ||= ""
+		@sov_annotation.optional_skills ||= ""
+
+		@nextJobId = params[:id].to_i + 1
+
+		render(:action => :annotate)
+	end	
+
 	def post_annotate
 		@newAnnotation = Annotation.new
 		@newAnnotation.user = currentUser

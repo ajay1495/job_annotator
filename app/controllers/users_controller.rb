@@ -20,7 +20,7 @@ class UsersController < ApplicationController
 		redirect_to("https://stella.ai/")
 	end
 
-	def invite
+	def login
 		if !params[:v] or !User.find_by_digest(params[:v])
 			redirect_to("https://stella.ai/")
 		else 
@@ -34,6 +34,40 @@ class UsersController < ApplicationController
 			end
 		end
 	end
+
+	def login_as_best_performing_candidate
+		@LIMIT = 20 
+		filteredUsers = User.where("progress >= ?", @LIMIT) # Do not allow any other candidates
+		oracleUser = User.first
+
+
+		bestCandidateScore = 0.0
+		bestCandidate = nil 
+
+		filteredUsers.each do |candidate| 
+			for jobId in 1..@LIMIT-1
+				@jobToAnnotate = Job.find_by_id(jobId)
+				puts jobId
+				annotationByCandidate = Annotation.where(user: candidate).order('created_at ASC')[jobId-1]
+
+				if !annotationByCandidate.job
+					annotationByCandidate.job = @jobToAnnotate
+					annotationByCandidate.save 
+				end
+
+				oracleAnnotation = Annotation.find_by(user: oracleUser, job_id: @jobToAnnotate.id)
+
+				candidateScore = Annotation.compute_similarity(annotationByCandidate, oracleAnnotation)
+				if candidateScore > bestCandidateScore
+					bestCandidate = candidate 
+					bestCandidateScore =  candidateScore
+				end
+			end
+		end
+
+		session[:user_id] = bestCandidate.id 	
+		redirect_to("/jobs/view_annotation/1")
+	end	
 
 	def post_update
 		if currentUser and params[:user] and params[:user][:name] and params[:user][:email]
