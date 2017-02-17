@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 	end
 
 	# Logs in the given user.
-	def login(user)
+	def login_session(user)
 	  	session[:user_id] = user.id
 	end
 
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
 			redirect_to("https://stella.ai/")
 		else 
 			@userToLogin = User.find_by_digest(params[:v])			
-			login(@userToLogin)
+			login_session(@userToLogin)
 
 			if !@userToLogin.is_initialized 
 				redirect_to("/users/update")
