@@ -35,16 +35,15 @@ class UsersController < ApplicationController
 		end
 	end
 
-	def login_as_best_performing_candidate
+	def analyze_candidates
 		@LIMIT = 20 
 		filteredUsers = User.where("progress >= ?", @LIMIT) # Do not allow any other candidates
 		oracleUser = User.first
 
-
-		bestCandidateScore = 0.0
-		bestCandidate = nil 
+		@candidatesAnalysis = []
 
 		filteredUsers.each do |candidate| 
+			totalScore = 0.0 
 			for jobId in 1..@LIMIT-1
 				@jobToAnnotate = Job.find_by_id(jobId)
 				puts jobId
@@ -57,16 +56,17 @@ class UsersController < ApplicationController
 
 				oracleAnnotation = Annotation.find_by(user: oracleUser, job_id: @jobToAnnotate.id)
 
-				candidateScore = Annotation.compute_similarity(annotationByCandidate, oracleAnnotation)
-				if candidateScore > bestCandidateScore
-					bestCandidate = candidate 
-					bestCandidateScore =  candidateScore
-				end
+				annotationScore = Annotation.compute_similarity(annotationByCandidate, oracleAnnotation)
+				totalScore += annotationScore
 			end
+
+			averageAnnotationScore = totalScore / (@LIMIT-1)
+
+			@candidatesAnalysis.append([candidate, averageAnnotationScore, candidate.timetaken, candidate.progress, candidate.othernotes])			
 		end
 
-		session[:user_id] = bestCandidate.id 	
-		redirect_to("/jobs/view_annotation/1")
+		#session[:user_id] = bestCandidate.id 	
+		#redirect_to("/jobs/view_annotation/1")
 	end	
 
 	def post_update

@@ -1,0 +1,44 @@
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+<div class="container-fluid" id="myContainer">
+    <div class="row">
+        <div class="col-sm-8 col-md-8 col-md-offset-2">        	
+            <h3>Candidate Analysis</h3>
+
+            <table id="viewAllTable" class="display table table-striped table-hover" data-toggle="popover" data-placement="top" data-trigger="manual" data-content="Your created maps will automatically be displayed here.">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Score</th>
+                  <th>Time Taken (minutes)</th>
+                  <th>Total Progress Made</th>
+                  <th>Feedback</th>
+                </tr>
+              </thead>
+              <tbody id="sortable">
+                <% @candidatesAnalysis.each do |candidate, candidateScore, timetaken, progress, othernotes| %>
+                    <tr>
+                        <td><%= candidate.name %></td>
+                        <td><%= candidateScore %></td>
+                        <td><%= timetaken %></td>
+                        <td><%= progress %></td>
+                        <td><%= othernotes %></td>
+                    </tr>
+                <% end %>                
+              </tbody>
+            </table>
+
+
+
+
+        </div>  
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#viewAllTable").DataTable({
+        "paging":   false,
+        "info":     false
+    });
+</script>

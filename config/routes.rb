@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get 'jobs/annotate/:id' => "jobs#annotate"
   post 'jobs/post_annotate' => "jobs#post_annotate"
   get 'login' => "users#login"
-  get 'login_as_best_performing_candidate' => "users#login_as_best_performing_candidate"
+  get 'analyze_candidates' => "users#analyze_candidates"
 
   
 
