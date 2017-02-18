@@ -38,7 +38,7 @@ class UsersController < ApplicationController
 	def analyze_candidates
 		@LIMIT = 20 
 		filteredUsers = User.where("progress >= ?", @LIMIT) # Do not allow any other candidates
-		oracleUser = User.first
+		oracleUser = User.find_by_email("ajay14@stanford.edu")
 
 		@candidatesAnalysis = []
 
