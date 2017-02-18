@@ -36,9 +36,8 @@ class JobsController < ApplicationController
 
 	def view_annotation
 		@job_to_annotate = Job.find_by_id(params[:id])
-		@sov_user = User.find_by_email("soverign@soverign.com")
 
-		@sov_annotation = Annotation.find_by(user: @sov_user, job_id: @job_to_annotate.id)
+		@sov_annotation = Annotation.find_by(user: currentUser, job_id: @job_to_annotate.id)
 		@sov_annotation.skills ||= ""
 		@sov_annotation.optional_skills ||= ""
 
