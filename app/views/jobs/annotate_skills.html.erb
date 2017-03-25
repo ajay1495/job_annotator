@@ -1,0 +1,149 @@
+<div class="container-fluid" id="myContainer">
+    <div class="row">      
+        <div class="col-sm-5 col-md-5 col-md-offset-1">                 
+        <h3><%= @job_to_annotate.title%> @ <%= @job_to_annotate.company_name%></h3>
+        <div id="jobDescription" class="noselect">
+          <%=@job_to_annotate.description.html_safe %>
+        </div>
+        <br/>
+        </div>      
+        <div class="col-sm-4 col-md-4 col-md-offset-1">         
+          <h2 class="form-signin-heading">Directions</h2>
+          <p>Read the job posting on the right, and annotate it with skills that are either A) REQUIRED for the job, or B) not required, but are nice to have skills for the job. Click the "Add Skill" to add a new skill.<p>
+          <p>For your convenience, we have pre-marked sections (in the gray) that are possible skills.</p>
+          <p><b>Legend</b></p>
+          <p><span class="required_skill">Green</span> = Required skill for the job.
+          <br/><span class="optional_skill">Orange</span> = Nice to have, but not required for the job.
+          <br/><span class="not_a_skill">Gray</span> = Not a skill at all.
+          </p>
+          <br/>
+          <button href="#" class="btn btn-success" id="add_skill">Add A Skill!</button>
+          <button href="#" class="btn btn-primary" onclick="saveAnnotations();">Save annotation!</button>
+          
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".possible_skill").addClass("not_a_skill");
+
+    setupOnClick();
+
+    $('#add_skill').click(function(){
+        var highlight = window.getSelection();
+        spn = '<span class="possible_skill not_a_skill">' + highlight + '</span>';
+        //debugger
+        parentElem = getSelectionBoundaryElement(true);
+        endingElem = getSelectionBoundaryElement(false);
+
+        //if
+
+        text = $(parentElem).html();
+        text = text.replaceAll(highlight.toString(), spn);
+
+        if(checkHTML(text)) {
+          $(parentElem).html(text);
+          setupOnClick();
+        }
+        else {
+          alert("Please highlight a valid portion of the job posting to annotate that skill.");
+        }
+        setupOnClick();
+    });
+  });
+
+  function saveAnnotations() {
+    var dataToSend = { _method:'POST' };
+    dataToSend.job_id  = <%= @currentJobID %>;
+    dataToSend.annotated_job_description = $("#jobDescription").html();
+
+    $.ajax({
+            type: "POST",
+            url: "/skills/new.json",
+            data: dataToSend,
+            success:function(data) {
+              // Reload 
+              window.location.href = "/jobs/skills/" + data.next_id
+
+              return false;
+          },
+            error:function(data) {
+              alert("There was an error in saving your annotations. Please try again.");
+              return false;
+            }
+    });    
+  }
+
+  function setupOnClick() {
+    $(".possible_skill").unbind("click");
+    $(".possible_skill").click(function() {
+      var nextClass = getNextClass(this);
+
+      if(!nextClass){
+        $(this).contents().unwrap();
+      }
+      else {
+        $(this).attr('class','possible_skill');
+        $(this).addClass(nextClass);        
+      } 
+
+    });
+  }
+
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+  };
+  var checkHTML = function(html) {
+    var doc = document.createElement('div');
+    doc.innerHTML = html;
+    return ( doc.innerHTML === html );
+  }
+  function getNextClass(obj) {
+    obj = $(obj);
+    if(obj.hasClass("not_a_skill"))
+      return "required_skill"
+    else if(obj.hasClass("required_skill"))
+      return "optional_skill"
+    else if(obj.hasClass("optional_skill"))
+      return null
+  }
+  function getSelectionBoundaryElement(isStart) {
+    var range, sel, container;
+    if (document.selection) {
+        range = document.selection.createRange();
+        range.collapse(isStart);
+        return range.parentElement();
+    } else {
+        sel = window.getSelection();
+        if (sel.getRangeAt) {
+            if (sel.rangeCount > 0) {
+                range = sel.getRangeAt(0);
+            }
+        } else {
+            // Old WebKit
+            range = document.createRange();
+            range.setStart(sel.anchorNode, sel.anchorOffset);
+            range.setEnd(sel.focusNode, sel.focusOffset);
+
+            // Handle the case when the selection was selected backwards (from the end to the start in the document)
+            if (range.collapsed !== sel.isCollapsed) {
+                range.setStart(sel.focusNode, sel.focusOffset);
+                range.setEnd(sel.anchorNode, sel.anchorOffset);
+            }
+       }
+
+        if (range) {
+           container = range[isStart ? "startContainer" : "endContainer"];
+
+           // Check if the container is a text node and return its parent if so
+           return container.nodeType === 3 ? container.parentNode : container;
+        }   
+    }
+  }
+</script>

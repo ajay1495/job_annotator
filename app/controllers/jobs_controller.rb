@@ -12,7 +12,7 @@ class JobsController < ApplicationController
 			return
 		end
 
-		@LIMIT = 20
+		@LIMIT = 40
 
 		if currentUser.progress >= @LIMIT
 			redirect_to("/users/survey")
@@ -33,6 +33,24 @@ class JobsController < ApplicationController
 
 		@nextJobId = params[:id].to_i + 1
 	end
+
+	def annotate_skills
+		if !currentUser
+			redirect_to("https://stella.ai/")
+			return
+		end
+
+		@currentJobID = params[:id]
+		@nextJobID = @currentJobID.to_i + 1
+		@job_to_annotate = Job.find_by_id(@currentJobID)
+
+		if !@job_to_annotate or !@job_to_annotate.is_description_annotated
+			nextGuy = params[:id].to_i+1
+			currentUser.skills_progress = nextGuy
+			currentUser.save
+			redirect_to("/jobs/skills/#{nextGuy.to_s}")
+		end
+	end	
 
 	def view_annotation
 		@job_to_annotate = Job.find_by_id(params[:id])

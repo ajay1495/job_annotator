@@ -1,14 +1,18 @@
 task :migrateDb => :environment do
 	puts "Loading jobs dump from local directory..."
 	
-	sovUser = User.new
-	sovUser.name = "Soverign"
-	sovUser.email = "Soverign@Soverign.com"
-	sovUser.is_initialized = true
-	sovUser.digest = ""
-	sovUser.save 
+	sovUser = User.find_by_email("Soverign@Soverign.com")
 
-	jobs_dump_filename = Rails.root + "../stella_client_jobs_dump.jobs.json"
+	if !sovUser
+		sovUser = User.new
+		sovUser.name = "Soverign"
+		sovUser.email = "Soverign@Soverign.com"
+		sovUser.is_initialized = true
+		sovUser.digest = ""
+		sovUser.save 		
+	end
+
+	jobs_dump_filename = Rails.root + "../stella_client_jobs_dump_Feb24.json"
         count = 0
 	File.open(jobs_dump_filename).readlines.each do |line|
 		count += 1
@@ -19,7 +23,7 @@ task :migrateDb => :environment do
    		job_info = JSON.parse(line)
 
    		# Housekeeping 
-		mongo_id = job_info["_id"]
+		mongo_id = job_info["_id"]["$oid"]
 		job_id = job_info["job_id"]
 
 		# Job information 
@@ -27,11 +31,32 @@ task :migrateDb => :environment do
 		company_name = job_info["company_name"]
 		description = job_info["description"]
 
+		posting = Job.where(title: job_title, company_name: company_name)
+
+		if posting.length > 1
+			puts "Found #{posting.length} job postings with same job title, company title... deleting them and just creating one."
+			posting.delete_all
+			# 
+		elsif posting.length == 1
+			posting = posting[0]
+
+			if posting.mongo_id != mongo_id
+				posting.mongo_id = mongo_id
+				posting.save 
+			end
+
+			next
+		end
+
 		posting = Job.new 
 		posting.title = job_title
 		posting.company_name = company_name
 		posting.description = description
 		posting.job_id = job_id
+		posting.mongo_id = mongo_id
+
+		puts "New posting, processing it!"
+
 		posting.save 
 
 		sov_annotations = Annotation.new 
