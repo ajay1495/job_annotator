@@ -55,7 +55,7 @@ task :migrateDb => :environment do
 		posting.job_id = job_id
 		posting.mongo_id = mongo_id
 
-		puts "New posting, processing it!"
+		# puts "New posting, processing it!"
 
 		posting.save 
 
