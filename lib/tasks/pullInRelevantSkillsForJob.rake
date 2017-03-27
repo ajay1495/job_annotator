@@ -37,7 +37,7 @@ task :pullInRelevantSkillsForJob => :environment do
 		end
 	end
 
-	puts "Couldn't find", len(couldntFind), "mongo ids... here they are", couldntFind
+	puts "Couldn't find", couldntFind.length, "mongo ids... here they are", couldntFind
 
 	puts "DONE pulling in relevant skills for job!"
 end 
