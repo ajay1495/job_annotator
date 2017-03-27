@@ -1,6 +1,7 @@
 task :pullInRelevantSkillsForJob => :environment do
 	annotated_job_descriptions = Rails.root + "../annotated_job_descriptions.json"
     count = -1
+    couldntFind = []
 
 	File.open(annotated_job_descriptions).readlines.each do |line|
 		count += 1
@@ -17,9 +18,7 @@ task :pullInRelevantSkillsForJob => :environment do
 		cur_job = Job.find_by_mongo_id(mongo_id)
 
 		if !cur_job
-			puts "Couldn't find job!"
-			puts count
-			puts mongo_id
+			couldntFind.append(mongo_id)
 			#puts description
 			#debugger
 			#crash_here_asdfasdf
@@ -32,6 +31,8 @@ task :pullInRelevantSkillsForJob => :environment do
 			end
 		end
 	end
+
+	puts "Couldn't find", len(couldntFind), "mongo ids... here they are", couldntFind
 
 	puts "DONE pulling in relevant skills for job!"
 end 
