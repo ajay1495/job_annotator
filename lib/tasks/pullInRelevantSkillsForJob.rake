@@ -9,6 +9,11 @@ task :pullInRelevantSkillsForJob => :environment do
 			puts "Processing line"
 			puts count
 		end
+
+		if count >= 9940 # The final two jobs have problems. Come back to this!
+			next 
+		end
+
    		annotated_job_description = JSON.parse(line)
 
 		mongo_id = annotated_job_description["job_mongo_id"]   		
