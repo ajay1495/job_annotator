@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 			if !@userToLogin.is_initialized 
 				redirect_to("/users/update")
 			else
-				redirect_to("/jobs/skills/#{@userToLogin.skills_progress}")
+				redirect_to("/skills/annotate/#{@userToLogin.get_skills_progress}")
 			end
 		end
 	end
@@ -76,7 +76,7 @@ class UsersController < ApplicationController
 			cur.email = params[:user][:email]
 			cur.is_initialized = true
 			if cur.save
-				redirect_to("/jobs/skills/#{cur.skills_progress}")
+				redirect_to("/skills/annotate/#{cur.get_skills_progress}")
 			else
 				redirect_to("/users/update")
 			end

@@ -1,0 +1,48 @@
+<div class="container-fluid" id="myContainer">
+    <div class="row">      
+      <div class="col-sm-10 col-md-10 col-md-offset-1">                 
+        <h2>Your accuracy: <%= "%.2f" % @accuracy %>%.</h2>
+        <p>Periodically, we will compare your annotations with the correct annotations, as shown on the right. Your overall accuracy against all of the previous annotations is <b><%= "%.2f" % @overallAccuracy %>%</b>. <a href="/skills/leaderboard">Click here</a> to see how you rank against the other contributers. Scroll down to continue.</p>
+        <hr />  
+      </div>
+    </div>        
+    <div class="row">      
+      <div class="col-sm-5 col-md-5 col-md-offset-1">                 
+        <h4><%= @job_to_annotate.title%> @ <%= @job_to_annotate.company_name%></h4>
+        <div id="jobDescription" class="noselect">
+          <%= @user_annotation.annotated_job_description.html_safe %>
+        </div>
+        <br/>
+      </div>      
+
+      <div class="col-sm-5 col-md-5" id="goldAnnotation">         
+        <h4><%= @job_to_annotate.title%> @ <%= @job_to_annotate.company_name%></h4>
+        <div id="jobDescription" class="noselect">
+          <%= @gold_annotation.annotated_job_description.html_safe %>
+        </div>
+        <br/>
+      </div>
+    </div>
+    <div class="row">      
+      <div class="col-sm-10 col-md-10 col-md-offset-1">                 
+        <button class="btn btn-primary" onclick="nextPage();">Continue</button>
+      </div>
+    </div>  
+
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+
+<script>
+function nextPage() {
+  window.location.href = "<%= @nextSkillsAnnotationLink %>"
+}
+</script>
+
+<style>
+  .not_a_skill {
+    background-color: transparent;
+  }
+</style>

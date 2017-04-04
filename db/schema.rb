@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170325054847) do
+ActiveRecord::Schema.define(version: 20170404093354) do
 
   create_table "annotations", force: :cascade do |t|
     t.integer  "job_id"
@@ -41,14 +41,15 @@ ActiveRecord::Schema.define(version: 20170325054847) do
     t.boolean  "is_description_annotated"
   end
 
-  create_table "skills", force: :cascade do |t|
+  create_table "skillsets", force: :cascade do |t|
     t.integer  "job_id"
     t.integer  "user_id"
     t.string   "annotated_job_description", default: ""
     t.string   "skills",                    default: ""
     t.string   "optional_skills",           default: ""
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.boolean  "is_gold",                   default: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -56,12 +57,13 @@ ActiveRecord::Schema.define(version: 20170325054847) do
     t.string   "email"
     t.boolean  "is_initialized"
     t.string   "digest"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.integer  "progress",        default: 1
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.integer  "progress",          default: 1
     t.integer  "timetaken"
     t.string   "othernotes"
-    t.integer  "skills_progress", default: 1
+    t.boolean  "is_gold_annotator", default: false
+    t.decimal  "skills_accuracy",   default: 0.0
   end
 
 end

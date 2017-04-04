@@ -1,6 +1,6 @@
 class CreateSkills < ActiveRecord::Migration
   def change
-    create_table :skills do |t|
+    create_table :skillsets do |t|
       # Relations
       t.integer :job_id
       t.integer :user_id
@@ -10,7 +10,12 @@ class CreateSkills < ActiveRecord::Migration
   	  t.string  :skills, :default => ""
   	  t.string  :optional_skills, :default => ""
 
+      t.boolean :is_gold, :default => false 
+
       t.timestamps null: false
     end
+
+    add_column :users, :is_gold_annotator, :boolean, :default => false
+    remove_column :users, :skills_progress
   end
 end

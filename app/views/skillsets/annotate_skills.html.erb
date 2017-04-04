@@ -64,11 +64,11 @@
 
     $.ajax({
             type: "POST",
-            url: "/skills/new.json",
+            url: "/skills/save.json",
             data: dataToSend,
             success:function(data) {
               // Reload 
-              window.location.href = "/jobs/skills/" + data.next_id
+              window.location.href = data.redirect_url
 
               return false;
           },

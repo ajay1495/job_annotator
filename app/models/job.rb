@@ -1,4 +1,4 @@
 class Job < ActiveRecord::Base
 	has_many :annotations
-	has_many :skills
+	has_many :skillsets
 end

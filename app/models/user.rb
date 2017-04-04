@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 	has_many :annotations
-	has_many :skills
+	has_many :skillsets
 	
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	before_save { self.email = email.downcase }
@@ -15,6 +15,18 @@ class User < ActiveRecord::Base
 	  BCrypt::Password.create(string, cost: cost)
 	end
 
-	
+	def get_skills_progress
+		if skillsets.length > 0
+			return skillsets.last.job_id + 1	
+		else
+			return 1
+		end
+	end
+
+	def update_skills_accuracy(new_incoming_accuracy)
+		total = skillsets.length.to_f 
+		self.skills_accuracy = self.skills_accuracy * (total-1) + new_incoming_accuracy
+		self.skills_accuracy /= total 
+	end
 
 end

@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+<div class="container-fluid" id="myContainer">
+    <div class="row">
+        <div class="col-sm-8 col-md-8 col-md-offset-2">        	
+            <h2>Leaderboard</h2>
+            <p>You can see how you rank against the other contributers here. We will be awarding prizes to the top contributers!</p>
+            <button class="btn btn-primary" onclick="nextPage();">Continue Annotating</button>
+
+            <table id="viewAllTable" class="display table table-striped table-hover" data-toggle="popover" data-placement="top" data-trigger="manual" data-content="Your created maps will automatically be displayed here.">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Total Annotations Made</th>
+                  <th>Accuracy</th>
+                </tr>
+              </thead>
+              <tbody id="sortable">
+                <% @users.each do |user| %>
+                    <tr>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.skillsets.length %></td>
+                        <td><%= "%.2f" % (user.skills_accuracy) %></td>
+                    </tr>
+                <% end %>                
+              </tbody>
+            </table>
+        </div>  
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#viewAllTable").DataTable({
+        "paging":   false,
+        "info":     false
+    });
+    function nextPage() {
+        window.location.href = "<%= @nextSkillsAnnotationLink %>"
+    }
+</script>

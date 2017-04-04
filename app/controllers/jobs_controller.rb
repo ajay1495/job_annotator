@@ -1,10 +1,5 @@
 class JobsController < ApplicationController
-	# Returns the current logged-in user (if any).
-	def currentUser
-		# @current_user is stored as instance variable, so if currentUser 
-		# is used multiple times a database search isn't done every time
-		@current_user ||= User.find_by(id: session[:user_id])
-	end
+	before_action :require_logged_in_user
 
 	def annotate
 		if !currentUser
@@ -33,24 +28,6 @@ class JobsController < ApplicationController
 
 		@nextJobId = params[:id].to_i + 1
 	end
-
-	def annotate_skills
-		if !currentUser
-			redirect_to("https://stella.ai/")
-			return
-		end
-
-		@currentJobID = params[:id]
-		@nextJobID = @currentJobID.to_i + 1
-		@job_to_annotate = Job.find_by_id(@currentJobID)
-
-		if !@job_to_annotate or !@job_to_annotate.is_description_annotated
-			nextGuy = params[:id].to_i+1
-			currentUser.skills_progress = nextGuy
-			currentUser.save
-			redirect_to("/jobs/skills/#{nextGuy.to_s}")
-		end
-	end	
 
 	def view_annotation
 		@job_to_annotate = Job.find_by_id(params[:id])
