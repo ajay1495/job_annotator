@@ -6,7 +6,7 @@ class SkillsetsController < ApplicationController
 		@nextJobID = @currentJobID.to_i + 1
 		@job_to_annotate = Job.find_by_id(@currentJobID)
 
-		if !@job_to_annotate or !@job_to_annotate.is_description_annotated or currentUser.get_skills_progress > @currentJobID.to_i
+		if !@job_to_annotate or !@job_to_annotate.is_description_annotated or (currentUser.get_skills_progress > @currentJobID.to_i and !currentUser.is_gold_annotator)
 			nextGuy = params[:id].to_i+1
 			redirect_to("/skills/annotate/#{nextGuy.to_s}")
 		end	
@@ -60,6 +60,7 @@ class SkillsetsController < ApplicationController
 		# Only show users that have actually started the annotations
 		@users = User.where("skills_accuracy > ?", 0.0) 
 		@users = @users.where(is_gold_annotator: false)
+		@nextSkillsAnnotationLink = "/skills/annotate/#{currentUser.get_skills_progress}"
 	end
 end
 
